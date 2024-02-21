@@ -2,6 +2,7 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 
 class News extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final title, image;
   const News({super.key, this.title, this.image});
 
@@ -25,7 +26,7 @@ class News extends StatelessWidget {
           Expanded(
               child: Text(
             title ?? '',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ))

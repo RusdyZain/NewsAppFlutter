@@ -11,32 +11,58 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  getNews() {
+    Provider.of<NewsProvider>(context, listen: false).getTopNews();
+  }
+
   @override
   void initState() {
     super.initState();
-    Provider.of<NewsProvider>(context, listen: false).getTopNews();
+    getNews();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<NewsProvider>(
         builder: (BuildContext context, news, Widget? child) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Berita Terbaru Saat Ini!'),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(news.isLoading.toString()),
-                const News(
-                  title: "Breaking News",
-                  image: "https://www.dits.center/images/picture13_1.jpg",
-                ),
-              ],
+      return RefreshIndicator(
+        onRefresh: () async {
+          news.setLoading(true);
+          return await getNews();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Berita Terbaru Saat Ini!'),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: IconButton(
+                    onPressed: () {}, icon: const Icon(Icons.search)),
+              )
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  news.isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Column(
+                          children: [
+                            ...news.resNews!.articles!.map(
+                              (e) => News(
+                                title: e.title ?? '',
+                                image: e.urlToImage ?? '',
+                              ),
+                            )
+                          ],
+                        ),
+                ],
+              ),
             ),
           ),
         ),
