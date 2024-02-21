@@ -12,6 +12,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<NewsProvider>(context, listen: false).getTopNews();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<NewsProvider>(
         builder: (BuildContext context, news, Widget? child) {
@@ -19,12 +25,14 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text('Berita Terbaru Saat Ini!'),
         ),
-        body: const SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                News(
+                Text(news.isLoading.toString()),
+                const News(
                   title: "Breaking News",
                   image: "https://www.dits.center/images/picture13_1.jpg",
                 ),
