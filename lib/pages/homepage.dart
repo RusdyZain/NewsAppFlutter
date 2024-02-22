@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newsapps/components/news.dart';
+import 'package:newsapps/pages/searchpage.dart';
 import 'package:newsapps/providers/news_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,14 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.search)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchPage()),
+                      );
+                    },
+                    icon: const Icon(Icons.search)),
               )
             ],
           ),

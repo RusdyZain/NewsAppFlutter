@@ -5,7 +5,12 @@ import 'package:newsapps/models/TopNewsModel.dart';
 
 class NewsProvider with ChangeNotifier {
   bool isLoading = true;
+
+  bool isLoadingSearch = true;
+  bool isDataEmpty = true;
+
   TopNewsModel? resNews;
+  TopNewsModel? resSearch;
 
   setLoading(data) {
     isLoading = false;
@@ -21,6 +26,24 @@ class NewsProvider with ChangeNotifier {
       resNews = TopNewsModel();
     }
     isLoading = false;
+    notifyListeners();
+  }
+
+  search(String search) async {
+    isDataEmpty = false;
+    isLoadingSearch = true;
+    notifyListeners();
+
+    final res =
+        await api('${baseUrl}q=$search&sortBy=popularity&apiKey=$apiKey');
+
+    if (res.statusCode == 200) {
+      resSearch = TopNewsModel.fromJson(res.data);
+    } else {
+      resSearch = TopNewsModel();
+    }
+
+    isLoadingSearch = false;
     notifyListeners();
   }
 }
